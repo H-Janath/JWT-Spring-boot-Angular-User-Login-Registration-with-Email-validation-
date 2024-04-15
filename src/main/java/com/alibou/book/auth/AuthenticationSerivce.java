@@ -1,11 +1,14 @@
 package com.alibou.book.auth;
-
+import com.alibou.book.email.EmailService;
+import com.alibou.book.email.EmailTemplateName;
 import com.alibou.book.role.RoleRepository;
 import com.alibou.book.user.Token;
 import com.alibou.book.user.TokenRepository;
 import com.alibou.book.user.User;
 import com.alibou.book.user.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +23,12 @@ public class AuthenticationSerivce {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
-    private UserRepository userRepository;
-    public void register(RegistrationRequest request) {
+    private final UserRepository userRepository;
+    private final EmailService emailService;
+    @Value("${application.mailing.frontend.activation-url}")
+    private String activationUrl;
+
+    public void register(RegistrationRequest request) throws MessagingException {
         var userRole = roleRepository.findByName("USER")
                 .orElseThrow(()-> new IllegalArgumentException("ROLE USER was not initialize"));
         var user = User.builder()
@@ -37,13 +44,20 @@ public class AuthenticationSerivce {
         sendValidationEmail(user);
     }
 
-    private void sendValidationEmail(User user) {
+    private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);
 
+        emailService.sendEmail(
+                user.getEmail(),
+                user.fullName(),
+                EmailTemplateName.ACTIVATE_ACCOUNT,
+                activationUrl,
+                newToken,
+                "Account activation");
     }
 
-    private Object generateAndSaveActivationToken(User user) {
-        //generat Token
+    private String generateAndSaveActivationToken(User user) {
+        //generate Token
         String generatedToken = generateAndSaveActivationCode(6);
         var token = Token.builder()
                 .token(generatedToken)
