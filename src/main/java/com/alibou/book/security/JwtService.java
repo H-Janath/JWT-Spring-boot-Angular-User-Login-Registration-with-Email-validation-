@@ -1,17 +1,12 @@
 package com.alibou.book.security;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.validation.Valid;
-import jakarta.websocket.Decoder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
@@ -20,11 +15,11 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private long jwtExpiration ;
-    @Value("${application.security.jwt.expiation}")
+    private long jwtExpiration =2323;
 
-    private String secretKey;
-    @Value("${application.security.jwt.secret-key}")
+
+    private String secretKey="lklk";
+
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
