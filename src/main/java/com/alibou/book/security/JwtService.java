@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,12 @@ import java.util.*;
 import java.util.function.Function;
 
 @Service
-@RequiredArgsConstructor
 public class JwtService {
+    @Value("${application.security.jwt.expiation}")
+    private long jwtExpiration;
 
-    private long jwtExpiration =2323;
-
-
-    private String secretKey="lklk";
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
 
 
     public String extractUserName(String token) {
