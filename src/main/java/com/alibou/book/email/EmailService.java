@@ -14,6 +14,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_MIXED;
+
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -38,8 +41,8 @@ public class EmailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(
                 mimeMessage,
-                MimeMessageHelper.MULTIPART_MODE_MIXED,
-                StandardCharsets.UTF_8.name()
+                MULTIPART_MODE_MIXED,
+                UTF_8.name()
         );
         Map<String,Object> properties = new HashMap<>();
         properties.put("username",username);

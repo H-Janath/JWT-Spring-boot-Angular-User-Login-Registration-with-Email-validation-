@@ -12,22 +12,22 @@ spring:
       hibernate:
         format-sql: true
     database: postgresql
+  mail:
+    host: localhost
+    port: 1025
+    username: janath
+    password: 123
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enable: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimout: 5000
 
-mail:
-  host: localhost
-  port: 1025
-  username: janath
-  password: 123
-  properties:
-    mail:
-      smtp:
-        trust: "*"
-      auth: true
-      starttls:
-       enable: true
-      connectiontimeout: 5000
-      timeout: 3000
-      writetimout: 5000
 
 application:
   security:
